@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
-data = {}
+app.data = {}
 
 @app.route('/',methods=['GET','POST'])
 def index():
   #return render_template('index.html')
-  data['ticker']=request.form['Stock Ticker']
-  return data['ticker']
+  app.data['ticker']=request.form['Stock Ticker']
+  return app.data['ticker']
 @app.route('/about')
 def about():
   return render_template('about.html')

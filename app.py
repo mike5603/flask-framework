@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-@app.route('/',methods=['POST'])
+@app.route('/',methods=['get'])
 def index():
   #return render_template('index.html')
   ticker=request.form('Stock Ticker')

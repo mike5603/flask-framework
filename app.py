@@ -6,7 +6,7 @@ data = {}
 @app.route('/',methods=['get'])
 def index():
   #return render_template('index.html')
-  data['ticker']=request.args('Stock Ticker')
+  data['ticker']=request.form('Stock Ticker')
   return data['ticker']
 @app.route('/about')
 def about():

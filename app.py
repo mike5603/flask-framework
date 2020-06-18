@@ -9,7 +9,7 @@ def index():
   if request.method=='GET':
     return render_template('input.html')
   app.data['ticker']=request.args['Stock Ticker']
-  print app.data['ticker']
+  print(app.data['ticker'])
   return 
 
 

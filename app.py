@@ -5,9 +5,13 @@ app.data = {}
 
 @app.route('/',methods=['GET','POST'])
 def index():
-  return render_template('index.html')
-  #app.data['ticker']=request.args['Stock Ticker']
-  #return app.data['ticker']
+  #return render_template('index.html')
+  if request.method=='GET':
+    return render_template('input.html')
+  app.data['ticker']=request.args['Stock Ticker']
+  return app.data['ticker']
+
+
 @app.route('/about')
 def about():
   return render_template('about.html')

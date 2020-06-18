@@ -35,6 +35,8 @@ def index():
   p.line(x='Date',y='close', source=df_range)
   try:
     os.remove('template/plot.html')
+  except:
+    pass
   p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
   htmlo =open('templates/plot.html','w')
   htmlo.write(file_html(p,CDN,'Stock Output'))

@@ -27,7 +27,7 @@ def index():
   htmlo =open('templates/plot.html','w')
   htmlo.write(file_html(p,CDN,'Stock Output'))
   htmlo.close()
-  return render_template('plot.html',script=script,div=div)
+  return render_template('plot.html')
 
 
 @app.route('/about')

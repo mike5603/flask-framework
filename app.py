@@ -24,9 +24,9 @@ def index():
   df_range = df.loc['2020-05-01':'2020-06-01']
   p=figure()
   p.line(x=df_range.index.values,y=df_range['4. close'])
-  html =open('templates/plot.html','w')
-  html.write(file_html(p,CDN,'Stock Output')
-  html.close()
+  htmlo =open('templates/plot.html','w')
+  htmlo.write(file_html(p,CDN,'Stock Output')
+  htmlo.close()
   return render_template('plot.html',script=script,div=div)
 
 

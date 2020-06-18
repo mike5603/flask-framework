@@ -38,10 +38,10 @@ def index():
   except:
     pass
   p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
-  htmlo =open('templates/plot.html','w')
-  htmlo.write(file_html(p,CDN,'Stock Output'))
-  htmlo.close()
-  return render_template('plot.html')
+  #htmlo =open('templates/plot.html','w')
+  #htmlo.write(file_html(p,CDN,'Stock Output'))
+  #htmlo.close()
+  return render_template_string(file_html(p,CDN,'Stock Output'))
 
 
 @app.route('/about')

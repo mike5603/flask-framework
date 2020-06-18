@@ -8,7 +8,7 @@ def index():
   #return render_template('index.html')
   if request.method=='GET':
     return render_template('input.html')
-  app.vars['ticker']=request.args['Stock Ticker']
+  app.vars['ticker']=request.form['Stock Ticker']
   return render_template('output.html',stock=app.vars['ticker'])
 
 

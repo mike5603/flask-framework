@@ -6,6 +6,7 @@ from bokeh.plotting import figure
 import datetime
 from bokeh.embed import file_html
 from bokeh.resources import CDN
+from bokeh.models import HoverTool
 
 app = Flask(__name__)
 app.vars = {}
@@ -26,6 +27,7 @@ def index():
   p.xaxis.axis_label='Date'
   p.yaxis.axis_label='Closing Price'
   p.line(x=df_range.index.values,y=df_range['4. close'])
+  p.add_tools(HoverTool(tooltips=[('Date','@df_range.index.values'),('Closing Value',"@df_range['4. close']")]))
   htmlo =open('templates/plot.html','w')
   htmlo.write(file_html(p,CDN,'Stock Output'))
   htmlo.close()

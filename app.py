@@ -23,11 +23,12 @@ def index():
   df.index=pandas.to_datetime(df.index)
   df = df.sort_index()
   df_range = df.loc['2020-05-01':'2020-06-01']
+  df_range['Date'] = df_range.index
   p=figure(x_axis_type='datetime')
   p.xaxis.axis_label='Date'
   p.yaxis.axis_label='Closing Price'
-  p.line(x=df_range.index.values,y=df_range['4. close'])
-  p.add_tools(HoverTool(tooltips=[('Date','@df_range.index.values'),('Closing Value',"@df_range['4. close']")]))
+  p.line(x='Date',y='4. close' source=df_range)
+  p.add_tools(HoverTool(tooltips=[('Date','@Date'),('Closing Value',"@4. close")]))
   htmlo =open('templates/plot.html','w')
   htmlo.write(file_html(p,CDN,'Stock Output'))
   htmlo.close()

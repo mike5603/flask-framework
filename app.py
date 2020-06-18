@@ -23,7 +23,7 @@ def index():
   p=figure()
   p.line(x=df_range.index.values,y=df_range['4. close'])
   script, div = components(p)
-  return render_template(plot.html,script=script,div=div)
+  return render_template('plot.html',script=script,div=div)
 
 
 @app.route('/about')

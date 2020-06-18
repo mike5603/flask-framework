@@ -27,7 +27,7 @@ def index():
   p=figure(x_axis_type='datetime')
   p.xaxis.axis_label='Date'
   p.yaxis.axis_label='Closing Price'
-  p.line(x='Date',y='4. close' source=df_range)
+  p.line(x='Date',y='4. close', source=df_range)
   p.add_tools(HoverTool(tooltips=[('Date','@Date'),('Closing Value',"@4. close")]))
   htmlo =open('templates/plot.html','w')
   htmlo.write(file_html(p,CDN,'Stock Output'))

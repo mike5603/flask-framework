@@ -25,7 +25,7 @@ def index():
   p=figure()
   p.line(x=df_range.index.values,y=df_range['4. close'])
   htmlo =open('templates/plot.html','w')
-  htmlo.write(file_html(p,CDN,'Stock Output')
+  htmlo.write(file_html(p,CDN,'Stock Output'))
   htmlo.close()
   return render_template('plot.html',script=script,div=div)
 

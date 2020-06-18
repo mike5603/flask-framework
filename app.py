@@ -18,13 +18,13 @@ def index():
     return render_template('input.html')
   app.vars['ticker']=request.form['Stock Ticker']
   app.vars['Starting Date']=request.form['Starting Date']
-  app.vars['Ending Date']=request.form['Ending Date'
+  app.vars['Ending Date']=request.form['Ending Date']
   r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
   data = json.loads(r.text)
   df = pandas.DataFrame.from_dict(data['Time Series (Daily)']).transpose()
   df.index=pandas.to_datetime(df.index)
   df = df.sort_index()
-  df_range = df.loc['2020-05-01':'2020-06-01']
+  df_range = df.loc[app.vars['Starting Date']:app.vars['Ending Date']]
   df_range['Date'] = df_range.index
   df_range['Date_str'] = df_range.index.strftime('%Y-%m-%d')
   df_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})

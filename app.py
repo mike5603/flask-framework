@@ -9,7 +9,7 @@ def index():
   if request.method=='GET':
     return render_template('input.html')
   app.data['ticker']=request.args['Stock Ticker']
-  return 'test' 
+  return render_template('output.html',stock=app.data['ticker'])
 
 
 @app.route('/about')

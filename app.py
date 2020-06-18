@@ -4,7 +4,8 @@ import json
 import pandas
 from bokeh.plotting import figure
 import datetime
-from bokeh.embed import components
+from bokeh.embed import file_html
+from bokeh.resources import CDN
 
 app = Flask(__name__)
 app.vars = {}
@@ -23,7 +24,9 @@ def index():
   df_range = df.loc['2020-05-01':'2020-06-01']
   p=figure()
   p.line(x=df_range.index.values,y=df_range['4. close'])
-  script, div = components(p)
+  html =open('templates/plot.html','w')
+  html.write(file_html(p,CDN,'Stock Output')
+  html.close()
   return render_template('plot.html',script=script,div=div)
 
 

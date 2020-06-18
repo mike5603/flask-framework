@@ -1,15 +1,15 @@
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
-app.data = {}
+app.vars = {}
 
 @app.route('/',methods=['GET','POST'])
 def index():
   #return render_template('index.html')
   if request.method=='GET':
     return render_template('input.html')
-  app.data['ticker']=request.args['Stock Ticker']
-  return render_template('output.html',stock=app.data['ticker'])
+  app.vars['ticker']=request.args['Stock Ticker']
+  return render_template('output.html',stock=app.vars['ticker'])
 
 
 @app.route('/about')

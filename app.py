@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect
 import requests
 import json
 import pandas
+from bokeh.plotting import figure
+import datetime
+from bokeh.embed import components
 
 app = Flask(__name__)
 app.vars = {}
@@ -14,8 +17,13 @@ def index():
   app.vars['ticker']=request.form['Stock Ticker']
   r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'apikey':'MB1WQJ87O5O9N9WM'})
   data = json.loads(r.text)
-  df = pandas.DataFrame.from_dict(data['Time Series (Daily)'])
-  return df.to_string()
+  df = pandas.DataFrame.from_dict(data['Time Series (Daily)']).transpose()
+  df.index=pandas.to_datetime(df.index)
+  df_range = df.loc['2020-05-01':'2020-06-01']
+  p=figure()
+  p.line(x=df_range.index.values,y=df_range['4. close'])
+  script, div = components(p)
+  return render_template(plot.html,script=script,div=div)
 
 
 @app.route('/about')

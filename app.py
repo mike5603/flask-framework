@@ -16,7 +16,7 @@ def index():
   data = json.loads(r.text)
   df = pandas.DataFrame.from_dict(data['Time Series (Daily)'])
   df.head
-  return
+  return 'test'
 
 
 @app.route('/about')

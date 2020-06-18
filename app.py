@@ -15,7 +15,8 @@ def index():
   r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'apikey':'MB1WQJ87O5O9N9WM'})
   data = json.loads(r.text)
   df = pandas.DataFrame.from_dict(data['Time Series (Daily)'])
-  return df.head
+  df.head
+  return
 
 
 @app.route('/about')

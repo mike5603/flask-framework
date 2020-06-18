@@ -9,8 +9,7 @@ def index():
   if request.method=='GET':
     return render_template('input.html')
   app.data['ticker']=request.args['Stock Ticker']
-  print(app.data['ticker'])
-  return HttpResponse('<pre>' + app.data['ticker'] + '</pre>') 
+  return str(app.data['ticker']) 
 
 
 @app.route('/about')

@@ -46,7 +46,7 @@ def index():
   p.line(x='Date',y='close', source=df_range)
   p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
   if app.vars['Dow Jones']=="1":
-    r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':'DJI','outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
+    r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':'GOOG','outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
     data2 = json.loads(r2.text)
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
     df2_range = df2.loc[app.vars['Starting Date']:app.vars['Ending Date']]

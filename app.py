@@ -57,11 +57,12 @@ def index():
     df2_range['Date'] = df2_range.index
     df2_range['Date_str'] = df2_range.index.strftime('%Y-%m-%d')
     df2_range = df2_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
-    ymax = df2_range['high'].max()
-    ymax = ymax-ymax%10+10
-    ymin = df2_range['low'].min()
-    ymin = ymin-ymin%10
-    p.extra_y_ranges = {"y2": Range1d(start=ymin, end=ymax)}
+    ymax = df_range['high'].max()
+    ymin = df_range['low'].min()
+    p.y_range=Range1d(start=ymin,end=ymax)
+    ymax2 = df2_range['high'].max()
+    ymin2 = df2_range['low'].min()
+    p.extra_y_ranges = {"y2": Range1d(start=ymin2, end=ymax2)}
     p.add_layout(LinearAxis(y_range_name="y2", axis_label='{} Closing Price'.format(app.vars['ticker 2'])), 'right')
     p.line(x='Date',y='close',source=df2_range,y_range_name='y2',line_width=3, line_color='red',legend_label=app.vars['ticker 2'])
     p.legend.location = "top_left"

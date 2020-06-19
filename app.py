@@ -43,7 +43,7 @@ def index():
   p=figure(x_axis_type='datetime',title='Stock Closing Price for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date']))
   p.xaxis.axis_label='Date'
   p.yaxis.axis_label='Closing Price'
-  p.line(x='Date',y='close', source=df_range)
+  p.line(x='Date',y='close', source=df_range,line_width=3)
   p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
   if app.vars['Dow Jones']=="1":
     r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':'GOOG','outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
@@ -59,7 +59,7 @@ def index():
     ymin = ymin-ymin%100
     p.extra_y_ranges = {"y2": Range1d(start=ymin, end=ymax)}
     p.add_layout(LinearAxis(y_range_name="y2", axis_label='Dow Jones Price'), 'right')
-    p.line(x='Date',y='close',source=df2_range,y_range_name='y2')
+    p.line(x='Date',y='close',source=df2_range,y_range_name='y2',line_width=3, line_color='red')
   #htmlo =open('templates/plot.html','w')
   #htmlo.write(file_html(p,CDN,'Stock Output'))
   #htmlo.close()

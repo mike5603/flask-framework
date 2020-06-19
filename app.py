@@ -41,7 +41,7 @@ def index():
   df_range['Date_str'] = df_range.index.strftime('%Y-%m-%d')
   df_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
   if df_range.empty:
-    return 'No data found for given stock ticker and date range'
+    return 'No data found for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date'])
   p=figure(x_axis_type='datetime',title='Stock Closing Price for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date']))
   p.xaxis.axis_label='Date'
   p.yaxis.axis_label='{} Closing Price'.format(app.vars['ticker'])
@@ -57,6 +57,8 @@ def index():
     df2_range['Date'] = df2_range.index
     df2_range['Date_str'] = df2_range.index.strftime('%Y-%m-%d')
     df2_range = df2_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
+    if df_range.empty:
+      return 'No data found for {} from {} to {}'.format(app.vars['ticker 2'],app.vars['Starting Date'],app.vars['Ending Date'])                  
     ymax = df_range['close'].max()
     ymin = df_range['close'].min()
     p.y_range=Range1d(start=ymin,end=ymax)

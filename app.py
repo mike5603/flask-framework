@@ -52,9 +52,9 @@ def index():
     data2 = json.loads(r2.text)
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
     df2_range = df2.loc[app.vars['Starting Date']:app.vars['Ending Date']]
-    df2_range['Date'] = df_range.index
-    df2_range['Date_str'] = df_range.index.strftime('%Y-%m-%d')
-    df2_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
+    df2_range['Date'] = df2_range.index
+    df2_range['Date_str'] = df2_range.index.strftime('%Y-%m-%d')
+    df2_range = df2_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
     ymax = df2_range['high'].max()
     ymax = ymax-ymax%10+10
     ymin = df2_range['low'].min()

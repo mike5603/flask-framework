@@ -51,6 +51,8 @@ def index():
     r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker 2'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
     data2 = json.loads(r2.text)
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
+    df2.index=pandas.to_datetime(df2.index)
+    df2 = df2.sort_index()
     df2_range = df2.loc[app.vars['Starting Date']:app.vars['Ending Date']]
     df2_range['Date'] = df2_range.index
     df2_range['Date_str'] = df2_range.index.strftime('%Y-%m-%d')

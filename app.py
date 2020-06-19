@@ -32,7 +32,7 @@ def index():
   df_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
   p=figure(x_axis_type='datetime')
   p.xaxis.axis_label='Date'
-  p.y_range= Range1d(int(math.floor(df_range.min()/10.0))*10,int(math.ceil(df_range.max()/10.0))*10)
+  p.y_range= Range1d(int(math.floor(df_range['low'].min()/10.0))*10,int(math.ceil(df_range['high'].max()/10.0))*10)
   p.yaxis.axis_label='Closing Price'
   p.line(x='Date',y='close', source=df_range)
   try:

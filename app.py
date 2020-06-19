@@ -62,6 +62,7 @@ def index():
     p.extra_y_ranges = {"y2": Range1d(start=ymin, end=ymax)}
     p.add_layout(LinearAxis(y_range_name="y2", axis_label='{} Closing Price'.format(app.vars['ticker 2'])), 'right')
     p.line(x='Date',y='close',source=df2_range,y_range_name='y2',line_width=3, line_color='red',legend_label=app.vars['ticker 2'])
+    p.legend.location = "top_left"
   else:
     p.legend.visible=False
   #htmlo =open('templates/plot.html','w')

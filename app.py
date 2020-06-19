@@ -21,7 +21,9 @@ def index():
   app.vars['ticker']=request.form['Stock Ticker']
   app.vars['Starting Date']=request.form['Starting Date']
   app.vars['Ending Date']=request.form['Ending Date']
-  app.vars['Dow Jones']=request.form.get('Dow')
+  app.vars['Plot2']=request.form.get('Dow')
+  if app.vars['plot2']=="1":
+    app.vars['ticker 2']=request.form['Stock Ticker 2']
   try:
     test = date.fromisoformat(app.vars['Starting Date'])
     test = date.fromisoformat(app.vars['Ending Date'])
@@ -42,11 +44,11 @@ def index():
     return 'No data found for given stock ticker and date range'
   p=figure(x_axis_type='datetime',title='Stock Closing Price for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date']))
   p.xaxis.axis_label='Date'
-  p.yaxis.axis_label='Closing Price'
+  p.yaxis.axis_label='{} Closing Price'.format(app.vars['ticker'])
   p.line(x='Date',y='close', source=df_range,line_width=3,legend_label=app.vars['ticker'])
   p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
   if app.vars['Dow Jones']=="1":
-    r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':'GOOG','outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
+    r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker 2'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
     data2 = json.loads(r2.text)
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
     df2_range = df2.loc[app.vars['Starting Date']:app.vars['Ending Date']]
@@ -54,12 +56,12 @@ def index():
     df2_range['Date_str'] = df_range.index.strftime('%Y-%m-%d')
     df2_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
     ymax = df2_range['high'].max()
-    ymax = ymax-ymax%100+100
+    ymax = ymax-ymax%10+10
     ymin = df2_range['low'].min()
-    ymin = ymin-ymin%100
+    ymin = ymin-ymin%10
     p.extra_y_ranges = {"y2": Range1d(start=ymin, end=ymax)}
-    p.add_layout(LinearAxis(y_range_name="y2", axis_label='Dow Jones Price'), 'right')
-    p.line(x='Date',y='close',source=df2_range,y_range_name='y2',line_width=3, line_color='red',legend_label='DJI')
+    p.add_layout(LinearAxis(y_range_name="y2", axis_label='{} Closing Price'.format(app.vars['ticker 2']), 'right')
+    p.line(x='Date',y='close',source=df2_range,y_range_name='y2',line_width=3, line_color='red',legend_label=app.vars['ticker 2'])
   else:
     p.legend.visible=False
   #htmlo =open('templates/plot.html','w')

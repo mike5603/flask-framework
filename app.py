@@ -21,7 +21,10 @@ def index():
   app.vars['ticker']=request.form['Stock Ticker']
   app.vars['Starting Date']=request.form['Starting Date']
   app.vars['Ending Date']=request.form['Ending Date']
-  r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
+  try:
+    r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
+  except:
+    return 'Stock Ticker Not Found'
   data = json.loads(r.text)
   df = pandas.DataFrame.from_dict(data['Time Series (Daily)'],dtype=float).transpose()
   df.index=pandas.to_datetime(df.index)
@@ -30,6 +33,8 @@ def index():
   df_range['Date'] = df_range.index
   df_range['Date_str'] = df_range.index.strftime('%Y-%m-%d')
   df_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
+  if df_range.empty:
+    return 'No data found for given stock ticker and date range'
   p=figure(x_axis_type='datetime',title='Stock Closing Price for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date']))
   p.xaxis.axis_label='Date'
   p.yaxis.axis_label='Closing Price'

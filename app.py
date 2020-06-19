@@ -21,11 +21,11 @@ def index():
   app.vars['ticker']=request.form['Stock Ticker']
   app.vars['Starting Date']=request.form['Starting Date']
   app.vars['Ending Date']=request.form['Ending Date']
-  try:
-    date.fromisoformat(app.vars['Starting Date'])
-    date.fromisoformat(app.vars['Ending Date'])
-  except:
-    return 'Please enter date in form "yyyy/mm/dd"'
+  #try:
+  test = date.fromisoformat(app.vars['Starting Date'])
+  test = date.fromisoformat(app.vars['Ending Date'])
+  #except:
+    #return 'Please enter date in form "yyyy/mm/dd"'
   r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
   data = json.loads(r.text)
   if 'Error Message' in data.keys():

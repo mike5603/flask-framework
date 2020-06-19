@@ -21,6 +21,7 @@ def index():
   app.vars['ticker']=request.form['Stock Ticker']
   app.vars['Starting Date']=request.form['Starting Date']
   app.vars['Ending Date']=request.form['Ending Date']
+  app.vars['Dow Jones']=request.form['Dow']
   try:
     test = date.fromisoformat(app.vars['Starting Date'])
     test = date.fromisoformat(app.vars['Ending Date'])

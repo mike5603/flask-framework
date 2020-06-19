@@ -31,6 +31,8 @@ def index():
     return 'Please enter date in form "yyyy-mm-dd"'
   r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
   data = json.loads(r.text)
+  if not data:
+    return 'No data found for {}'.format(app.vars['ticker'])
   if 'Error Message' in data.keys():
     return 'Stock Ticker Not Found'
   df = pandas.DataFrame.from_dict(data['Time Series (Daily)'],dtype=float).transpose()
@@ -50,6 +52,8 @@ def index():
   if app.vars['Plot2']=="1":
     r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker 2'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
     data2 = json.loads(r2.text)
+    if not data2:
+      return 'No data found for {}'.format(app.vars['ticker 2'])
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
     df2.index=pandas.to_datetime(df2.index)
     df2 = df2.sort_index()

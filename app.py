@@ -68,6 +68,7 @@ def index():
     p.legend.location = "top_left"
     p.yaxis[0].axis_label_text_color = 'blue'
     p.yaxis[1].axis_label_text_color = 'red'
+    p.title.text='Stock Closing Price for {} and {} from {} to {}'format(app.vars['ticker'],app.vars['ticker 2'],app.vars['Starting Date'],app.vars['Ending Date'])
   else:
     p.legend.visible=False
   #htmlo =open('templates/plot.html','w')

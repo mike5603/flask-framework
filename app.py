@@ -22,7 +22,7 @@ def index():
   app.vars['Starting Date']=request.form['Starting Date']
   app.vars['Ending Date']=request.form['Ending Date']
   app.vars['Plot2']=request.form.get('Dow')
-  if app.vars['plot2']=="1":
+  if app.vars['Plot2']=="1":
     app.vars['ticker 2']=request.form['Stock Ticker 2']
   try:
     test = date.fromisoformat(app.vars['Starting Date'])
@@ -47,7 +47,7 @@ def index():
   p.yaxis.axis_label='{} Closing Price'.format(app.vars['ticker'])
   p.line(x='Date',y='close', source=df_range,line_width=3,legend_label=app.vars['ticker'])
   p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
-  if app.vars['Dow Jones']=="1":
+  if app.vars['Plot2']=="1":
     r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker 2'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
     data2 = json.loads(r2.text)
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()

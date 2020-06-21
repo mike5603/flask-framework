@@ -54,6 +54,11 @@ def index():
     data2 = json.loads(r2.text)
     if not data2:
       return 'No data found for {}'.format(app.vars['ticker 2'])
+    if 'Error Message' in data.keys():
+      if app.vars['ticker 2']=='':
+        return 'Input Symbol for Second Stock'
+      else:
+        return 'No data found for {}'.format(app.vars['ticker 2'])
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
     df2.index=pandas.to_datetime(df2.index)
     df2 = df2.sort_index()

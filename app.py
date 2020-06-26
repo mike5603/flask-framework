@@ -34,9 +34,33 @@ def transformData(data):
   return df_range
 
 
+def plot(df_range):
+  p=figure(x_axis_type='datetime',title='Stock Closing Price for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date']))
+  p.xaxis.axis_label='Date'
+  p.yaxis.axis_label='{} Closing Price'.format(app.vars['ticker'])
+  p.line(x='Date',y='close', source=df_range,line_width=3,legend_label=app.vars['ticker'])
+  p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
+  p.legend.visible=False
+  return p
+
+def addLine(df_range,df2_range):
+  ymax = df_range['close'].max()
+  ymin = df_range['close'].min()
+  p.y_range=Range1d(start=ymin,end=ymax)
+  ymax2 = df2_range['close'].max()
+  ymin2 = df2_range['close'].min()
+  p.extra_y_ranges = {"y2": Range1d(start=ymin2, end=ymax2)}
+  p.add_layout(LinearAxis(y_range_name="y2", axis_label='{} Closing Price'.format(app.vars['ticker 2'])), 'right')
+  p.line(x='Date',y='close',source=df2_range,y_range_name='y2',line_width=3, line_color='red',legend_label=app.vars['ticker 2'])
+  p.legend.location = "top_left"
+  p.yaxis[0].axis_label_text_color = 'blue'
+  p.yaxis[1].axis_label_text_color = 'red'
+  p.title.text='Stock Closing Price for {} and {} from {} to {}'.format(app.vars['ticker'],app.vars['ticker 2'],app.vars['Starting Date'],app.vars['Ending Date'])
+  p.legend.visible=True
+  return p
+
 @app.route('/',methods=['GET','POST'])
 def index():
-  #return render_template('index.html')
   if request.method=='GET':
     return render_template('input.html')
   app.vars['ticker']=request.form['Stock Ticker']
@@ -53,11 +77,7 @@ def index():
   df_range=transformData(data)
   if df_range.empty:
     return 'No data found for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date'])
-  p=figure(x_axis_type='datetime',title='Stock Closing Price for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date']))
-  p.xaxis.axis_label='Date'
-  p.yaxis.axis_label='{} Closing Price'.format(app.vars['ticker'])
-  p.line(x='Date',y='close', source=df_range,line_width=3,legend_label=app.vars['ticker'])
-  p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
+  p=plot(df_range)
   if app.vars['Plot2']=="1":
     data2,output2=getData(app.vars['ticker 2'])
     if output2!=None:
@@ -65,23 +85,7 @@ def index():
     df2_range=transformData(data2)
     if df2_range.empty:
       return 'No data found for {} from {} to {}'.format(app.vars['ticker 2'],app.vars['Starting Date'],app.vars['Ending Date'])                  
-    ymax = df_range['close'].max()
-    ymin = df_range['close'].min()
-    p.y_range=Range1d(start=ymin,end=ymax)
-    ymax2 = df2_range['close'].max()
-    ymin2 = df2_range['close'].min()
-    p.extra_y_ranges = {"y2": Range1d(start=ymin2, end=ymax2)}
-    p.add_layout(LinearAxis(y_range_name="y2", axis_label='{} Closing Price'.format(app.vars['ticker 2'])), 'right')
-    p.line(x='Date',y='close',source=df2_range,y_range_name='y2',line_width=3, line_color='red',legend_label=app.vars['ticker 2'])
-    p.legend.location = "top_left"
-    p.yaxis[0].axis_label_text_color = 'blue'
-    p.yaxis[1].axis_label_text_color = 'red'
-    p.title.text='Stock Closing Price for {} and {} from {} to {}'.format(app.vars['ticker'],app.vars['ticker 2'],app.vars['Starting Date'],app.vars['Ending Date'])
-  else:
-    p.legend.visible=False
-  #htmlo =open('templates/plot.html','w')
-  #htmlo.write(file_html(p,CDN,'Stock Output'))
-  #htmlo.close()
+    p=addLine(df_range,df2_range)
   return render_template_string(file_html(p,CDN,'Stock Output'))
 
 

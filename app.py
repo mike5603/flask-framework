@@ -43,7 +43,7 @@ def plot(df_range):
   p.legend.visible=False
   return p
 
-def addLine(df_range,df2_range):
+def addLine(df_range,df2_range,p):
   ymax = df_range['close'].max()
   ymin = df_range['close'].min()
   p.y_range=Range1d(start=ymin,end=ymax)
@@ -85,7 +85,7 @@ def index():
     df2_range=transformData(data2)
     if df2_range.empty:
       return 'No data found for {} from {} to {}'.format(app.vars['ticker 2'],app.vars['Starting Date'],app.vars['Ending Date'])                  
-    p=addLine(df_range,df2_range)
+    p=addLine(df_range,df2_range,p)
   return render_template_string(file_html(p,CDN,'Stock Output'))
 
 

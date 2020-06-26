@@ -13,6 +13,17 @@ from datetime import date
 app = Flask(__name__)
 app.vars = {}
 
+
+def getData(ticker):
+  r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':ticker,'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
+  data = json.loads(r.text)
+  if not data:
+    return data, 'No data found for {}'.format(app.vars['ticker'])
+  if 'Error Message' in data.keys():
+    return data, 'Stock Ticker Not Found'
+  return data, None
+
+
 @app.route('/',methods=['GET','POST'])
 def index():
   #return render_template('index.html')
@@ -24,17 +35,11 @@ def index():
   app.vars['Plot2']=request.form.get('Dow')
   if app.vars['Plot2']=="1":
     app.vars['ticker 2']=request.form['Stock Ticker 2']
-  try:
-    test = date.fromisoformat(app.vars['Starting Date'])
-    test = date.fromisoformat(app.vars['Ending Date'])
-  except:
-    return 'Please enter date in form "yyyy-mm-dd"'
-  r = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
-  data = json.loads(r.text)
-  if not data:
-    return 'No data found for {}'.format(app.vars['ticker'])
-  if 'Error Message' in data.keys():
-    return 'Stock Ticker Not Found'
+    if app.vars['ticker 2']=='':
+      return'Input Symbol for Second Stock'
+  data,output = getData(app.vars['ticker'])
+  if output!=None:
+    return output
   df = pandas.DataFrame.from_dict(data['Time Series (Daily)'],dtype=float).transpose()
   df.index=pandas.to_datetime(df.index)
   df = df.sort_index()
@@ -50,15 +55,9 @@ def index():
   p.line(x='Date',y='close', source=df_range,line_width=3,legend_label=app.vars['ticker'])
   p.add_tools(HoverTool(tooltips=[('Date','@Date_str'),('Closing Value',"@close")]))
   if app.vars['Plot2']=="1":
-    r2 = requests.get('https://www.alphavantage.co/query',params={'function':'TIME_SERIES_DAILY','symbol':app.vars['ticker 2'],'outputsize':'full','apikey':'MB1WQJ87O5O9N9WM'})
-    data2 = json.loads(r2.text)
-    if not data2:
-      return 'No data found for {}'.format(app.vars['ticker 2'])
-    if 'Error Message' in data.keys():
-      if app.vars['ticker 2']=='':
-        return 'Input Symbol for Second Stock'
-      else:
-        return 'No data found for {}'.format(app.vars['ticker 2'])
+    data2,output2=getData(app.vars['ticker 2'])
+    if output2!=None:
+      return output2
     df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
     df2.index=pandas.to_datetime(df2.index)
     df2 = df2.sort_index()

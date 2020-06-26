@@ -1,3 +1,3 @@
 git add .
-git commit -m "test"
+git commit -m "clean code"
 git push heroku master

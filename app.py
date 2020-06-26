@@ -23,6 +23,16 @@ def getData(ticker):
     return data, 'Stock Ticker Not Found'
   return data, None
 
+def transformData(data):
+  df = pandas.DataFrame.from_dict(data['Time Series (Daily)'],dtype=float).transpose()
+  df.index=pandas.to_datetime(df.index)
+  df = df.sort_index()
+  df_range = df.loc[app.vars['Starting Date']:app.vars['Ending Date']]
+  df_range['Date'] = df_range.index
+  df_range['Date_str'] = df_range.index.strftime('%Y-%m-%d')
+  df_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
+  return df_range
+
 
 @app.route('/',methods=['GET','POST'])
 def index():
@@ -40,13 +50,7 @@ def index():
   data,output = getData(app.vars['ticker'])
   if output!=None:
     return output
-  df = pandas.DataFrame.from_dict(data['Time Series (Daily)'],dtype=float).transpose()
-  df.index=pandas.to_datetime(df.index)
-  df = df.sort_index()
-  df_range = df.loc[app.vars['Starting Date']:app.vars['Ending Date']]
-  df_range['Date'] = df_range.index
-  df_range['Date_str'] = df_range.index.strftime('%Y-%m-%d')
-  df_range = df_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
+  df_range=transformData(data)
   if df_range.empty:
     return 'No data found for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date'])
   p=figure(x_axis_type='datetime',title='Stock Closing Price for {} from {} to {}'.format(app.vars['ticker'],app.vars['Starting Date'],app.vars['Ending Date']))
@@ -58,13 +62,7 @@ def index():
     data2,output2=getData(app.vars['ticker 2'])
     if output2!=None:
       return output2
-    df2 = pandas.DataFrame.from_dict(data2['Time Series (Daily)'],dtype=float).transpose()
-    df2.index=pandas.to_datetime(df2.index)
-    df2 = df2.sort_index()
-    df2_range = df2.loc[app.vars['Starting Date']:app.vars['Ending Date']]
-    df2_range['Date'] = df2_range.index
-    df2_range['Date_str'] = df2_range.index.strftime('%Y-%m-%d')
-    df2_range = df2_range.rename(columns={'1. open':'open','2. high':'high','3. low':'low','4. close':'close','5. volume':'volume'})
+    df2_range=transformData(data2)
     if df2_range.empty:
       return 'No data found for {} from {} to {}'.format(app.vars['ticker 2'],app.vars['Starting Date'],app.vars['Ending Date'])                  
     ymax = df_range['close'].max()
